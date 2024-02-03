@@ -1,11 +1,3 @@
-
-"""
-update this file to implement the following already declared methods:
-- add_member: Should add a member to the self._members list
-- delete_member: Should delete a member from the self._members list
-- update_member: Should update a member from the self._members list
-- get_member: Should return a member from the self._members list
-"""
 from random import randint
 
 class FamilyStructure:
@@ -40,16 +32,28 @@ class FamilyStructure:
         return randint(0, 99999999)
 
     def add_member(self, member):
+        member["id"] == self._generateId()
         self._members.append(member)
         return self._members
 
     def delete_member(self, id):
-        self._members.remove(self._members.id == id)
+        self._members = [member for member in self._members if member["id"] != id]
         return self._members
 
+    def update_member(self, id, updated_member):
+        for member in self._members:
+            if member["id"] == id:
+                member.update(updated_member)
+                return member
+
+        return None
+
     def get_member(self, id):
-        member = (lambda x: x == id, self._members.id)
-        return member
+        for member in self._members:
+            if member["id"] == id:
+                return member
+            
+        return None
 
     def get_all_members(self):
         return self._members

@@ -32,9 +32,39 @@ def get_family_members():
 
 @app.route('/members/<int>:id', methods=['GET'])
 def get_specific_member():
-    member = jackson_family.get_member()
+    member = jackson_family.get_member(id)
+    if member:
+        return jsonify(member), 200
+    else:
+        raise APIException("Member not found", status_code=404)
+    
 
-# this only runs if `$ python src/app.py` is executed
+@app.route('/members', methods=['POST'])
+def add_member():
+    new_member = request.json
+    members = jackson_family.add_member(new_member)
+    response_body = {
+        "family": members
+    }
+    return jsonify(response_body), 201
+
+@app.route('/members/<int>:id', methods=['DELETE'])
+def delete_member():
+    members = jackson_family.delete_member(id)
+    response_body = {
+        "family": members
+    }
+    return jsonify(response_body), 200
+
+@app.route('/members/<int>:id', methods=['PUT'])
+def update_member(id):
+    updated_member = request.json
+    member = jackson_family.update_member(id, updated_member)
+    if member:
+        return jsonify(member), 200
+    else:
+        raise APIException("Member not found", status_code=404)
+
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
     app.run(host='0.0.0.0', port=PORT, debug=True)
